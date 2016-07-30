@@ -1,0 +1,19 @@
+%h1 You've checked out the following items:
+
+#cart
+  %table.table
+    - @orders.each do |order|
+      %tr
+        %td
+          = link_to order.product.name, product_path(order.product)
+        %td $#{number_with_precision(order.product.price, precision: 2)}
+        %td= order.quantity
+        %td $#{number_with_precision(order.quantity * order.product.price , precision: 2)}
+    %tr
+      %td
+      %td GRAND TOTAL
+      %td
+      %td#total $#{number_with_precision(@sum , precision: 2)}
+      %td
+
+%h2 Thank you for your purchase!

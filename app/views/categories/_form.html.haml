@@ -1,0 +1,19 @@
+.container
+  = form_for @category do |f|
+    - if @category.errors.any?
+      %div
+        - flash.each do |message_type, message|
+          .alert{class: "alert-#{message_type}"}
+            = message
+        - flash.clear
+        %h3
+          = pluralize(@category.errors.count, "error")
+          prohibited this category from being saved:
+        %ul
+          - @category.errors.full_messages.each do |msg|
+            %li= msg
+    %p
+      = f.label :'Category Name'
+      = f.text_field :name, autofocus: true
+    %p
+      = f.submit

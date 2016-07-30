@@ -1,0 +1,33 @@
+%h1 SHOPPING CART
+#cart
+  %h3 Products
+  %table.table
+    %tr
+      %td.col-xs-2 Name
+      %td.col-xs-2 Price
+      %td.col-xs-2 Quantity
+      %td.col-xs-2 Total
+      %td.col-xs-2
+    - @orders.each do |order|
+      %tr
+        %td
+          = link_to order.product.name, product_path(order.product)
+        %td $#{number_with_precision(order.product.price, precision: 2)}
+        %td= order.quantity
+        %td $#{number_with_precision(order.quantity * order.product.price , precision: 2)}
+        %td
+          %small
+            = link_to 'Remove item', [order], method: :delete, class: "remove-order"
+    %tr
+      %td
+      %td GRAND TOTAL
+      %td
+      %td#total $#{number_with_precision(@sum , precision: 2)}
+      %td
+
+-if @orders.empty? || too_many?
+  - if too_many?
+    .alert{class: "alert-danger"} Your cart has too many: #{too_many?.product.name}
+  %button.btn.btn-default.btn-lg.disabled{disabled: true} Checkout
+-else
+  = link_to "Checkout", checkout_path, method: :patch, class:"btn btn-lg btn-primary"
