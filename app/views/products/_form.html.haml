@@ -1,0 +1,39 @@
+.container
+  = form_for @product do |f|
+    - if @product.errors.any?
+      %div
+        - flash.each do |message_type, message|
+          .alert{class: "alert-#{message_type}"}
+            = message
+        - flash.clear
+        %h3
+          = pluralize(@product.errors.count, "error")
+          prohibited thisj product from being saved:
+        %ul
+          - @product.errors.full_messages.each do |msg|
+            %li= msg
+    .row
+      %p
+        = f.label :'Product Name', class: "col-md-4 control-label"
+        = f.text_field :name, class: "form-control", autofocus: true
+      %p
+        = f.label :'Product Description', class: "col-md-4 control-label"
+        = f.text_field :description, class: "form-control"
+      %p
+        = f.label :'Product Price', class: "col-md-4 control-label"
+        = f.text_field :price, class: "form-control"
+      %p
+        = f.label :'Product Starting Quantity', class: "col-md-4 control-label"
+        = f.text_field :remaining_qty, class: "form-control"
+      %p
+        = f.label :'Image URL', class: "col-md-4 control-label"
+        = f.text_field :img, class: "form-control"
+    .row
+      - @categories.each do |category|
+        %p
+          .col-xs-2
+            = f.label category.name, class: "control-label"
+            %input{id: "category#{category.id}", type: "checkbox", name: "category[]", value: "#{category.id}", checked: @product.categories.include?(category)}
+    %p
+      = f.submit class: "btn btn-primary"
+

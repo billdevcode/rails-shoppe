@@ -1,0 +1,20 @@
+%h1 ORDER HISTORY
+#cart
+  %h3 Products
+  = link_to "Download PDF", order_path('all', format: :pdf)
+  %table.table
+    %tr
+      %td.col-xs-2 Name
+      %td.col-xs-2 Price
+      %td.col-xs-2 Quantity
+      %td.col-xs-2 Total
+      %td.col-xs-2 Time & Date
+    - @orders.each do |order|
+      %tr
+        %td
+          = link_to order.product.name, product_path(order.product)
+        %td $#{number_with_precision(order.product.price, precision: 2)}
+        %td= order.quantity
+        %td $#{number_with_precision(order.quantity * order.product.price , precision: 2)}
+        %td= order.updated_at.strftime("%l:%M %p on %m/%d/%Y")
+

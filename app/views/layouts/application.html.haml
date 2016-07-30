@@ -1,0 +1,39 @@
+%html
+	%head
+		%meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+		%title Shoppe
+		= stylesheet_link_tag    'application', media: 'all'
+		= javascript_include_tag 'application'
+		= csrf_meta_tags
+	%body
+
+		.container
+			.header.clearfix
+				%nav
+					%ul.nav.nav-pills.pull-right{role: "tablist"}
+						%li.dropdown
+							%a.dropdown-toggle{"data-toggle": "dropdown", role: "button", "aria-haspopup": "true", "aria-expanded": "false"} Categories
+
+							%ul.dropdown-menu
+								- all_categories.each do |category|
+									%li.dropdown-links
+										= link_to(category.name, category_path(category))
+						- if current_user
+							%li= link_to "Shopping Cart", orders_path
+							%li= link_to "Order History", order_path("all")
+							-if current_user.admin
+								%li= link_to "Admin", admin_path
+							%li= link_to 'Logout', session_path(session[:user_id]), method: :delete
+						- else
+							%li= link_to 'Create User', new_user_path
+							%li= link_to 'Login', new_session_path
+
+				%h3.text-muted= link_to "Rails Shoppe", root_path
+				%hr
+
+
+		.container
+			= yield
+
+-# https://launchschool.com/blog/integrating-rails-and-bootstrap-part-2
+-# http://sass-cheatsheet.brunoscopelliti.com/

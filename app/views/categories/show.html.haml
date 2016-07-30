@@ -1,0 +1,43 @@
+.container
+  - flash.each do |message_type, message|
+    .alert{class: "alert-#{message_type}"}
+      = message
+  - flash.clear
+  .row#top
+    .jumbotron
+      %h3= @category.name
+      - if logged_in?
+        %p.col-xs-3= link_to('New Product', new_product_path)
+        %p.col-xs-3= link_to 'Edit', edit_category_path(@category)
+        %p.col-xs-3= link_to 'Delete', [@category], method: :delete, data: { confirm: 'Are you sure?' }
+        %p.col-xs-3= link_to 'Back', :back
+  .row
+    - @category.products.each do |product|
+      .card.col-md-3
+        .card-image.image-container
+          =link_to image_tag(product.img, class: "img-responsive center-block"), product
+
+        .card-content
+          %p= "$#{number_with_precision(product.price, :precision => 2)}"
+          %p.text-muted only #{product.remaining_qty} left
+          %p= product.description
+        .card-action
+          =link_to(product.name, product)
+          = form_for @order do |f|
+            - if @order.errors.any?
+              %div
+                - flash.each do |message_type, message|
+                  .alert{class: "alert-#{message_type}"}
+                    = message
+                - flash.clear
+            .form-group.form-group-sm
+              = f.hidden_field :quantity, value: 1
+              = f.hidden_field :product_id, value: product.id
+
+            -if product.remaining_qty <= 0
+              %button.btn.btn-default.disabled{disabled: "true"} Out of stock
+            -else
+              - if current_user
+                %p
+                  = f.submit "Add To Cart", class: "btn btn-primary"
+

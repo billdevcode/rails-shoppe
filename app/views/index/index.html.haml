@@ -1,0 +1,19 @@
+%div
+	- flash.each do |message_type, message|
+		.alert{class: "alert-#{message_type}"}
+			= message
+	- flash.clear
+
+.jumbotron
+	%h2 Shop your heart out!
+	%p Welcome to my personal shop. Please feel free to look around!
+
+
+%h3 Category List
+
+%ul.list-group
+	- @categories.each do |category|
+		%li.list-group-item
+			= link_to category.name, category_path(category)
+- if logged_in?
+	= link_to 'Add Category', new_category_path
